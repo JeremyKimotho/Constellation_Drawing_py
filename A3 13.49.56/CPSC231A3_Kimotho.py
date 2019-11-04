@@ -115,8 +115,27 @@ def command_line():
         print('Too many arguments have been listed, try listing between 0 and 2 arguments.')
         sys.exit(1)
 
-def read_star_info():
-    pass
+def read_star_info(star_file):
+    try:
+        sf=open(star_file, 'r')
+        lines=sf.readlines()
+        for line in lines:
+            splits=line.split(',')
+            # print(splits)
+            # The lines are getting split correctly but I'm not sure how to proceed when there are multiple names for a star  or when they're no names for a star given. Note that when the names do exist an are split, they'll end up with the next line command \n at the end of it e.g. If a star was called ZETA it will appear in the split list as  ZETA\n. If there are multiple names it will only appear on the last one.
+            if len(splits)>=6:
+                try:
+                    float(splits[0])
+                    float(splits[1])
+                    float(splits[4])
+                    star_info=[splits[0], splits[1], splits[4]]
+                except ValueError:
+                    print(f'The information in the star file {star_file} is of the wrong type')
+            else:
+                print(f'The star file {star_file} doesn’t have the required amount of entries separated by commas')
+    except IOError:
+        print(f'There was an error in opening the star file {star_file}')
+        sys.exit(1)
 
 # Draws only the x-axis. 0,yo is the point halfway up the y-axis and most negative value on x-axis - the graph coordinates are -1,0. The ticks list contains the increments that the axis will go up in.
 def drawXAxis(pointer):
@@ -193,6 +212,7 @@ def setup():
 
 def main():
     star_file, const_files, code=command_line()
+    read_star_info(star_file)
     #Handle arguments
     #Read star information from file (function)
     # pointer = setup()
