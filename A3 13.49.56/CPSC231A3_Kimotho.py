@@ -199,6 +199,9 @@ def read_const_info():
 def const_drawing():
     pass
 
+def colour_cycler():
+    pass
+
 def setup():
     pointer = turtle.Turtle()
     screen = turtle.getscreen()
