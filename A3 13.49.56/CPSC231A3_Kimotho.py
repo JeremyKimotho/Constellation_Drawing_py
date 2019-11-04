@@ -19,8 +19,24 @@ def screenCoor(x, y):
     return x_coordinate, y_coordinate
 
 def command_line():
-    for arg in sys.argv:
-        print(arg)
+    if len(sys.argv)==1:
+        print('prompt for a stars-location-file, then loop prompting for valid constellation files until the user enters an empty string (“”)')
+    elif len(sys.argv)==2:
+        if sys.argv[1]=='-names':
+            print('prompt for a stars-location-file and when drawing named stars write their names to drawing window, then loop prompting for valid constellation files until “” entered”')
+        else:
+            print('use arg1 as stars-location-file, and loop prompting for valid constellation files until “” entered')
+    elif len(sys.argv)==3:
+        if sys.argv[1]=='-names':
+            print('use arg2 as stars-location-file and when drawing named stars write their name to screen, loop prompting for valid constellation files until “” entered')
+        elif sys.argv[2]=='-names':
+            print('use arg1 as stars-location-file and when drawing named stars write their name to drawing window, loop prompting for valid constellation files until “” entered')
+        else:
+            print('Invalid argument. Neither input was -names')
+            sys.exit(1)
+    elif len(sys.argv)==4:
+        print('Too many arguments have been listed, try listing between 0 and 2 arguments.')
+        sys.exit(1)
 
 def read_star_info():
     pass
@@ -102,17 +118,17 @@ def main():
     command_line()
     #Handle arguments
     #Read star information from file (function)
-    pointer = setup()
+    # pointer = setup()
     #Draw Axes (function)
-    pointer.color(AXISCOLOR)
-    axis_drawing(pointer)
+    # pointer.color(AXISCOLOR)
+    # axis_drawing(pointer)
     #Draw Stars (function)
     #Loop getting filenames
         #Read constellation file (function)
         #Draw Constellation (function)
         #Draw bounding box (Bonus) (function)
-    expr = input("Enter an arithmetic expression: ")
-    while expr != "":
-        expr = input("Enter an arithmetic expression: ")
+    # expr = input("Enter an arithmetic expression: ")
+    # while expr != "":
+        # expr = input("Enter an arithmetic expression: ")
 
 main()
