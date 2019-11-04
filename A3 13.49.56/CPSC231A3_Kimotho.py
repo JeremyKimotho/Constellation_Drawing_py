@@ -1,6 +1,7 @@
 import sys
 import os
 import turtle
+from os import path
 
 WIDTH = 600
 HEIGHT = 600
@@ -21,16 +22,91 @@ def screenCoor(x, y):
 def command_line():
     if len(sys.argv)==1:
         print('prompt for a stars-location-file, then loop prompting for valid constellation files until the user enters an empty string (“”)')
+        # Collects the data it needs to collect correctly. The constellation files entered are in a list.
+        star_file=input('Enter a stars-location-file: ')
+        if path.exists(star_file)==False:
+            print(f'The file entered {star_file} does not exist.')
+            sys.exit(1)
+        const_file=input('Enter a constellation file: ')
+        const_files=[]
+        while const_file!='':
+            if path.isfile(const_file)==False:
+                print(f'The constellation file you entered {const_file} is invalid.')
+                sys.exit(1)
+            const_files.append(const_file)
+            const_file=input('Enter a constellation file: ')
+        print(f'You entered the star file {star_file} and {len(const_files)} valid constellation file(s).')
+
     elif len(sys.argv)==2:
         if sys.argv[1]=='-names':
             print('prompt for a stars-location-file and when drawing named stars write their names to drawing window, then loop prompting for valid constellation files until “” entered”')
+            # Collects the data it needs to collect correctly. The constellation files entered are in a list. However need to add functionality to draw names to drawing window of names stars.
+            star_file=input('Enter a stars-location-file: ')
+            if path.exists(star_file)==False:
+                print(f'The file entered {star_file} does not exist.')
+                sys.exit(1)
+            const_file=input('Enter a constellation file: ')
+            const_files=[]
+            while const_file!='':
+                if path.isfile(const_file)==False:
+                    print(f'The constellation file you entered {const_file} is invalid.')
+                    sys.exit(1)
+                const_files.append(const_file)
+                const_file=input('Enter a constellation file: ')
+            print(f'You entered the star file {star_file} and {len(const_files)} valid constellation file(s).')
+
         else:
+            # Collects the data it needs to collect correctly. The constellation files entered are in a list.
             print('use arg1 as stars-location-file, and loop prompting for valid constellation files until “” entered')
+            star_file=sys.argv[1]
+            if path.exists(star_file)==False:
+                print(f'The file entered {star_file} does not exist.')
+                sys.exit(1)
+            const_file=input('Enter a constellation file: ')
+            const_files=[]
+            while const_file!='':
+                if path.isfile(const_file)==False:
+                    print(f'The constellation file you entered {const_file} is invalid.')
+                    sys.exit(1)
+                const_files.append(const_file)
+                const_file=input('Enter a constellation file: ')
+            print(f'You entered the star file {star_file} and {len(const_files)} valid constellation file(s).')
+
     elif len(sys.argv)==3:
         if sys.argv[1]=='-names':
             print('use arg2 as stars-location-file and when drawing named stars write their name to screen, loop prompting for valid constellation files until “” entered')
+            # Collects the data it needs to collect correctly. The constellation files entered are in a list. However need to add functionality to write name to screen.
+            star_file=sys.argv[2]
+            if path.exists(star_file)==False:
+                print(f'The file entered {star_file} does not exist.')
+                sys.exit(1)
+            const_file=input('Enter a constellation file: ')
+            const_files=[]
+            while const_file!='':
+                if path.isfile(const_file)==False:
+                    print(f'The constellation file you entered {const_file} is invalid.')
+                    sys.exit(1)
+                const_files.append(const_file)
+                const_file=input('Enter a constellation file: ')
+            print(f'You entered the star file {star_file} and {len(const_files)} valid constellation file(s).')
+
         elif sys.argv[2]=='-names':
             print('use arg1 as stars-location-file and when drawing named stars write their name to drawing window, loop prompting for valid constellation files until “” entered')
+            # Collects the data it needs to collect correctly. The constellation files entered are in a list. However need to add functionality to write name to screen.
+            star_file=sys.argv[1]
+            if path.exists(star_file)==False:
+                print(f'The file entered {star_file} does not exist.')
+                sys.exit(1)
+            const_file=input('Enter a constellation file: ')
+            const_files=[]
+            while const_file!='':
+                if path.isfile(const_file)==False:
+                    print(f'The constellation file you entered {const_file} is invalid.')
+                    sys.exit(1)
+                const_files.append(const_file)
+                const_file=input('Enter a constellation file: ')
+            print(f'You entered the star file {star_file} and {len(const_files)} valid constellation file(s).')
+
         else:
             print('Invalid argument. Neither input was -names')
             sys.exit(1)
