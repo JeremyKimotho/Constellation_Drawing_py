@@ -123,6 +123,7 @@ def read_star_info(star_file):
             splits=line.split(',')
             # print(splits)
             # The lines are getting split correctly but I'm not sure how to proceed when there are multiple names for a star  or when they're no names for a star given. Note that when the names do exist an are split, they'll end up with the next line command \n at the end of it e.g. If a star was called ZETA it will appear in the split list as  ZETA\n. If there are multiple names it will only appear on the last one.
+            # When there are two names create  two different star info tuples or lists and then assign them the names.
             if len(splits)>=6:
                 try:
                     float(splits[0])
@@ -199,8 +200,14 @@ def read_const_info():
 def const_drawing():
     pass
 
-def colour_cycler():
-    pass
+# The function that changes the colour of the constellation lines. It goes from red to green to yellow and cycles through those three colours
+def colour_cycler(counter):
+    if counter==0 or counter%3==0:
+      return 'red'
+    elif counter==1 or counter%3==1:
+      return 'green'
+    elif counter==2 or counter%3==2:
+      return 'yellow'
 
 def setup():
     pointer = turtle.Turtle()
