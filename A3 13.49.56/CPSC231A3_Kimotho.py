@@ -275,13 +275,22 @@ def read_const_info(const_files):
             sys.exit(1)
     return processed_const_data
     
-
-def const_drawing(processed_const_data, processed_star_data):
-    for constellation in processed_const_data:
-        for i in range(0, processed_star_data):
-            if constellation==processed_star_data[i]:
-            # I'm trying to make a loop that takes one of the star values in the tuple of processed const data (there are two values in that tuple), and then loops through  the star data to find the coordinates for that star. Then goes to the second value in the tuple and does the same thing. Then it draws the line, then goes to the next tuple in the const data. The color cyler for the pointer also needs to be in this function.
-
+# Takes as input the pointer which is the turtle from the setup functions, the const data from the const info function and the star data from the star info function. The const info is a list in tuples of two which are the pairs of stars which the constellation goes from, these are the pairs referred to in the first loop. The star data comes in a list of dictionaries. With the names as keys and the star data as the values. The names are what we are searching for in the second loop. Once the correct star is found by name the data is recorded  and used as the start and end point of one line of the constellation.
+def const_drawing(pointer,processed_const_data, processed_star_data):
+    counter=0
+    for pair in processed_const_data:
+        for star in processed_star_data:
+            if pair[0]==star.name:
+                line1=(star.data[0], star.data[1])
+            elif pair[1]==star.name:
+                line2=(star.data[0], star.data[1])
+        print(f'The constellation with star edge {pair[0]} to {pair[1]} has start {line1} and end {line2}')
+        pointer.penup()
+        pointer.goto(screenCoor(line1[0], line1[1]))
+        pointer.pendown()
+        pointer.color(colour_cycler(counter))
+        pointer.goto(screenCoor(line2[0], line2[1]))
+    counter+=1   
 
 def setup():
     pointer = turtle.Turtle()
@@ -295,23 +304,25 @@ def setup():
     return pointer
 
 def main():
-    # star_file, const_files, code=command_line()
-    # processed_star_data=read_star_info(star_file)
-    # pointer = setup()
-    # # Draw Axes (function)
-    # pointer.color(AXISCOLOR)
-    # axis_drawing(pointer)
-    # # Draw Stars (function)
-    # star_drawing(pointer, code, processed_star_data)
-    const_files=['BigDipper.dat']
+    # Command Line argument function runs which asks for stars and constellations
+    star_file, const_files, code=command_line()
+    # Star info is collected from files given in the command line function
+    processed_star_data=read_star_info(star_file)
+    # Drawing window is setup
+    pointer = setup()
+    # Draw Axes (function)
+    pointer.color(AXISCOLOR)
+    axis_drawing(pointer)
+    # Draw Stars (function)
+    star_drawing(pointer, code, processed_star_data)
+    # Constellation info is then collected again and added to any that was collected in command line function
     processed_const_data=read_const_info(const_files)
-    const_drawing(processed_const_data, processed_star_data)
-    #Loop getting filenames
-        #Read constellation file (function)
-        #Draw Constellation (function)
-        #Draw bounding box (Bonus) (function)
-    expr = input("Enter an arithmetic expression: ")
-    while expr != "":
-        expr = input("Enter an arithmetic expression: ")
+    # Draw Constellation
+    const_drawing(pointer, processed_const_data, processed_star_data)
+    #Draw bounding box (Bonus) (function)
+    # expr = input("Enter an arithmetic expression: ")
+    # while expr != "":
+    #     expr = input("Enter an arithmetic expression: ")
 
 main()
+turtle.exitonclick()
