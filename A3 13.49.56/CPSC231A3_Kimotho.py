@@ -115,25 +115,41 @@ def command_line():
         print('Too many arguments have been listed, try listing between 0 and 2 arguments.')
         sys.exit(1)
 
+# Reads the star information collected from the command line arguments. Creates a class StarInformation that has name and star data as what it collects. A list stars is created which will be used to store the dictionaries created from the StarInformation class. The information is read through line-by-line and the last variable checked to see if a name(s) is provided. If there is a name or multiple, they will all be used to create a dictionary with the same data but different name. If no name is provided the star will remain nameless but the data still collected. The data for the star is saved as tuples, the data is the value and the names the keys in our dictionaries. The function returns the list stars that contains dictionaries.
 def read_star_info(star_file):
+    class StarInformation:
+        def __init__(self, name, data):
+            self.name = name
+            self.data = data
+    stars=[]
     try:
         sf=open(star_file, 'r')
         lines=sf.readlines()
         for line in lines:
             splits=line.split(',')
-            # print(splits)
-            # The lines are getting split correctly but I'm not sure how to proceed when there are multiple names for a star  or when they're no names for a star given. Note that when the names do exist an are split, they'll end up with the next line command \n at the end of it e.g. If a star was called ZETA it will appear in the split list as  ZETA\n. If there are multiple names it will only appear on the last one.
-            # When there are two names create  two different star info tuples or lists and then assign them the names.
             if len(splits)>=6:
                 try:
                     float(splits[0])
                     float(splits[1])
                     float(splits[4])
-                    star_info=[splits[0], splits[1], splits[4]]
+                    star_info=(splits[0], splits[1], splits[4])
+                    names=splits[6].split(';')
+                    if names[0]=='\n':
+                        names[0]=''
+                    else:
+                        names[-1]=names[-1][0:-1]
+                    for star in names:
+                        each_star=StarInformation(star, star_info)
+                        stars.append(each_star)
+                        print(f'{star} is at ({star_info[0]}, {star_info[1]}) with magnitude {star_info[2]}')
                 except ValueError:
-                    print(f'The information in the star file {star_file} is of the wrong type')
+                    print(f'The information in the star file {star_file} is of the wrong data type')
+                    sys.exit(1)
             else:
                 print(f'The star file {star_file} doesn’t have the required amount of entries separated by commas')
+                sys.exit(1)
+        sf.close()
+        return stars
     except IOError:
         print(f'There was an error in opening the star file {star_file}')
         sys.exit(1)
@@ -222,7 +238,7 @@ def setup():
 
 def main():
     star_file, const_files, code=command_line()
-    read_star_info(star_file)
+    read_star_data=read_star_info(star_file)
     #Handle arguments
     #Read star information from file (function)
     # pointer = setup()
