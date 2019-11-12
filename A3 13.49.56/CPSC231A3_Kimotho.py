@@ -1,3 +1,7 @@
+# Jeremy Kimotho-30096043, CPSC  231 02-T06
+# A program written in python that draws stars and constellations between the stars by reading files with the appropriate information.
+# 12/11/2019
+
 import sys
 import os
 import turtle
@@ -31,7 +35,6 @@ def colour_cycler(counter):
 #  Collects data from the command line input using the number of arguments. Checks inputted star_file to ensure it exists and then prompts for constellation files until user enters blank input. Constellation files are also checked for validity. Function then returns three variables in all situations where an error doesn't occur. These are first the star_file the user entered, then a list of the constellation files the user entered, and finally a code of 0, 1, or 2. The code determines if the star and constellations will just be drawn (0), if the star and constellation files will be drawn and the names written in the drawing window (1) or finally if the star and constellation files will be drawn and the names printed to the screen. All the situations that do not result in an error have one of the three coded outcomes.
 def command_line():
     if len(sys.argv)==1:
-        print('prompt for a stars-location-file, then loop prompting for valid constellation files until the user enters an empty string (“”)')
         star_file=input('Enter a stars-location-file: ')
         if path.exists(star_file)==False:
             print(f'The file entered {star_file} does not exist.')
@@ -48,7 +51,6 @@ def command_line():
 
     elif len(sys.argv)==2:
         if sys.argv[1]=='-names':
-            print('prompt for a stars-location-file and when drawing named stars write their names to drawing window, then loop prompting for valid constellation files until “” entered”')
             star_file=input('Enter a stars-location-file: ')
             if path.exists(star_file)==False:
                 print(f'The file entered {star_file} does not exist.')
@@ -64,7 +66,6 @@ def command_line():
             return star_file, const_files, 1
 
         else:
-            print('use arg1 as stars-location-file, and loop prompting for valid constellation files until “” entered')
             star_file=sys.argv[1]
             if path.exists(star_file)==False:
                 print(f'The file entered {star_file} does not exist.')
@@ -81,7 +82,6 @@ def command_line():
 
     elif len(sys.argv)==3:
         if sys.argv[1]=='-names':
-            print('use arg2 as stars-location-file and when drawing named stars write their name to screen, loop prompting for valid constellation files until “” entered')
             star_file=sys.argv[2]
             if path.exists(star_file)==False:
                 print(f'The file entered {star_file} does not exist.')
@@ -97,7 +97,6 @@ def command_line():
             return star_file, const_files, 1
 
         elif sys.argv[2]=='-names':
-            print('use arg1 as stars-location-file and when drawing named stars write their name to drawing window, loop prompting for valid constellation files until “” entered')
             star_file=sys.argv[1]
             if path.exists(star_file)==False:
                 print(f'The file entered {star_file} does not exist.')
@@ -241,7 +240,6 @@ def star_drawing(pointer, code, stars):
                 pointer.write(star.name,font=("Arial", 5, "normal"))
             elif code==2:
                 print(star.name)
-    print('Completed it!')
 
 # Takes as input the constellation files that were added during the command line argument collection and extends that to the list of const files it gets from the  user at the start of the function. Then loops through all the const files and makes tuples line-by-line and these tuples are the star edge or constellation edges. Lastly prints to the console the title of every constellation and the stars it connects. Returns list of tuples.
 def read_const_info(const_files):
@@ -284,7 +282,6 @@ def const_drawing(pointer,processed_const_data, processed_star_data):
                 line1=(star.data[0], star.data[1])
             elif pair[1]==star.name:
                 line2=(star.data[0], star.data[1])
-        print(f'The constellation with star edge {pair[0]} to {pair[1]} has start {line1} and end {line2}')
         pointer.penup()
         pointer.goto(screenCoor(line1[0], line1[1]))
         pointer.pendown()
@@ -292,6 +289,7 @@ def const_drawing(pointer,processed_const_data, processed_star_data):
         pointer.goto(screenCoor(line2[0], line2[1]))
     counter+=1   
 
+#  Setup of turtle screen before we draw
 def setup():
     pointer = turtle.Turtle()
     screen = turtle.getscreen()
@@ -303,6 +301,7 @@ def setup():
     pointer.up()
     return pointer
 
+# Calls all other functions and is what we run. 
 def main():
     # Command Line argument function runs which asks for stars and constellations
     star_file, const_files, code=command_line()
@@ -320,9 +319,8 @@ def main():
     # Draw Constellation
     const_drawing(pointer, processed_const_data, processed_star_data)
     #Draw bounding box (Bonus) (function)
-    # expr = input("Enter an arithmetic expression: ")
-    # while expr != "":
-    #     expr = input("Enter an arithmetic expression: ")
 
+# Run the program 
 main()
+# Keeps turtle window open till clicked
 turtle.exitonclick()
