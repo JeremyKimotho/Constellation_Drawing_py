@@ -32,7 +32,6 @@ def command_line():
         while const_file!='':
             if path.isfile(const_file)==False:
                 print(f'The constellation file you entered {const_file} is invalid.')
-                sys.exit(1)
             const_files.append(const_file)
             const_file=input('Enter a constellation file: ')
         print(f'You entered the star file {star_file} and {len(const_files)} valid constellation file(s).')
@@ -50,7 +49,6 @@ def command_line():
             while const_file!='':
                 if path.isfile(const_file)==False:
                     print(f'The constellation file you entered {const_file} is invalid.')
-                    sys.exit(1)
                 const_files.append(const_file)
                 const_file=input('Enter a constellation file: ')
             print(f'You entered the star file {star_file} and {len(const_files)} valid constellation file(s).')
@@ -67,7 +65,6 @@ def command_line():
             while const_file!='':
                 if path.isfile(const_file)==False:
                     print(f'The constellation file you entered {const_file} is invalid.')
-                    sys.exit(1)
                 const_files.append(const_file)
                 const_file=input('Enter a constellation file: ')
             print(f'You entered the star file {star_file} and {len(const_files)} valid constellation file(s).')
@@ -85,7 +82,6 @@ def command_line():
             while const_file!='':
                 if path.isfile(const_file)==False:
                     print(f'The constellation file you entered {const_file} is invalid.')
-                    sys.exit(1)
                 const_files.append(const_file)
                 const_file=input('Enter a constellation file: ')
             print(f'You entered the star file {star_file} and {len(const_files)} valid constellation file(s).')
@@ -102,7 +98,6 @@ def command_line():
             while const_file!='':
                 if path.isfile(const_file)==False:
                     print(f'The constellation file you entered {const_file} is invalid.')
-                    sys.exit(1)
                 const_files.append(const_file)
                 const_file=input('Enter a constellation file: ')
             print(f'You entered the star file {star_file} and {len(const_files)} valid constellation file(s).')
@@ -240,7 +235,13 @@ def star_drawing(pointer, code, stars):
     print('Completed it!')
 
 def read_const_info():
-    pass
+    const_files=[]
+    const_file=input('Enter a constellation file: ')
+    while const_file!='':
+        if path.isfile(const_file)==False:
+            print(f'The constellation file you entered {const_file} is invalid.')
+        const_files.append(const_file)
+        const_file=input('Enter a constellation file: ')
 
 def const_drawing():
     pass
@@ -274,8 +275,7 @@ def main():
     axis_drawing(pointer)
     #Draw Stars (function)
     star_drawing(pointer, code, processed_star_data)
-    #Handle arguments
-    #Read star information from file (function)
+    read_const_info()
     #Loop getting filenames
         #Read constellation file (function)
         #Draw Constellation (function)
