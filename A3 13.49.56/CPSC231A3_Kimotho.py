@@ -254,7 +254,7 @@ def read_const_info(const_files):
             const_files_2.append(const_file)
         const_file=input('Enter a constellation file: ')
     all_files=const_files+const_files_2
-    processed_const_files=[]
+    processed_const_data=[]
     for const_file in all_files:
         try:
             cf=open(const_file, 'r')
@@ -263,7 +263,7 @@ def read_const_info(const_files):
             for i in range(1, len(lines)):
                 star_edge=lines[i].split(',')
                 const_info=(star_edge[0], star_edge[1][0:-1])
-                processed_const_files.append(const_info)
+                processed_const_data.append(const_info)
             # Haven't got the name returning to work
             #     const_names.append(star_edge[0])
             #     if i==len(lines):
@@ -273,11 +273,15 @@ def read_const_info(const_files):
         except IOError:
             print(f'There was an error in opening the constellation file {const_file}')
             sys.exit(1)
-    return processed_const_files
+    return processed_const_data
     
 
-def const_drawing():
-    pass
+def const_drawing(processed_const_data, processed_star_data):
+    for constellation in processed_const_data:
+        for i in range(0, processed_star_data):
+            if constellation==processed_star_data[i]:
+            # I'm trying to make a loop that takes one of the star values in the tuple of processed const data (there are two values in that tuple), and then loops through  the star data to find the coordinates for that star. Then goes to the second value in the tuple and does the same thing. Then it draws the line, then goes to the next tuple in the const data. The color cyler for the pointer also needs to be in this function.
+
 
 def setup():
     pointer = turtle.Turtle()
@@ -300,7 +304,8 @@ def main():
     # # Draw Stars (function)
     # star_drawing(pointer, code, processed_star_data)
     const_files=['BigDipper.dat']
-    read_const_info(const_files)
+    processed_const_data=read_const_info(const_files)
+    const_drawing(processed_const_data, processed_star_data)
     #Loop getting filenames
         #Read constellation file (function)
         #Draw Constellation (function)
