@@ -132,7 +132,7 @@ def read_star_info(star_file):
                     float(splits[0])
                     float(splits[1])
                     float(splits[4])
-                    star_info=(splits[0], splits[1], splits[4])
+                    star_info=(float(splits[0]), float(splits[1]), float(splits[4]))
                     names=splits[6].split(';')
                     if names[0]=='\n':
                         names[0]=''
@@ -141,7 +141,8 @@ def read_star_info(star_file):
                     for star in names:
                         each_star=StarInformation(star, star_info)
                         stars.append(each_star)
-                        print(f'{star} is at ({star_info[0]}, {star_info[1]}) with magnitude {star_info[2]}')
+                        if star!='':
+                            print(f'{star} is at ({star_info[0]}, {star_info[1]}) with magnitude {star_info[2]}')
                 except ValueError:
                     print(f'The information in the star file {star_file} is of the wrong data type')
                     sys.exit(1)
@@ -207,8 +208,36 @@ def axis_drawing(pointer):
     drawXAxis(pointer)
     drawYAxis(pointer)
 
-def star_drawing():
-    pass
+# Takes as input the processed star data from the read_star_info file and draws the stars in that list. Also takes the code collected in the command line arguments function that determine if the names should be written in the drawing window or printed to the screen.
+def star_drawing(pointer, code, stars):
+    for star in stars:
+        if star.name=='':
+            circle_radius=(10 / (star.data[2] + 2)) / 2
+            pointer.color('grey')
+            pointer.penup()
+            pointer.goto(screenCoor(star.data[0],star.data[1]))
+            pointer.pendown()
+            pointer.begin_fill()
+            pointer.circle(circle_radius)
+            pointer.end_fill()
+            if code==1:
+                pointer.write(star.name,font=("Arial", 5, "normal"))
+            elif code==2:
+                print(star.name)
+        else: 
+            circle_radius=(10 / (star.data[2] + 2)) / 2
+            pointer.color('white')
+            pointer.penup()
+            pointer.goto(screenCoor(star.data[0],star.data[1]))
+            pointer.pendown()
+            pointer.begin_fill()
+            pointer.circle(circle_radius)
+            pointer.end_fill()
+            if code==1:
+                pointer.write(star.name,font=("Arial", 5, "normal"))
+            elif code==2:
+                print(star.name)
+    print('Completed it!')
 
 def read_const_info():
     pass
@@ -238,20 +267,21 @@ def setup():
 
 def main():
     star_file, const_files, code=command_line()
-    read_star_data=read_star_info(star_file)
+    processed_star_data=read_star_info(star_file)
+    pointer = setup()
+    #Draw Axes (function)
+    pointer.color(AXISCOLOR)
+    axis_drawing(pointer)
+    #Draw Stars (function)
+    star_drawing(pointer, code, processed_star_data)
     #Handle arguments
     #Read star information from file (function)
-    # pointer = setup()
-    #Draw Axes (function)
-    # pointer.color(AXISCOLOR)
-    # axis_drawing(pointer)
-    #Draw Stars (function)
     #Loop getting filenames
         #Read constellation file (function)
         #Draw Constellation (function)
         #Draw bounding box (Bonus) (function)
-    # expr = input("Enter an arithmetic expression: ")
-    # while expr != "":
-        # expr = input("Enter an arithmetic expression: ")
+    expr = input("Enter an arithmetic expression: ")
+    while expr != "":
+        expr = input("Enter an arithmetic expression: ")
 
 main()
