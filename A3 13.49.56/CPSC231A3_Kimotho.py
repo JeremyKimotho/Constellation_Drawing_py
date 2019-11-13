@@ -13,6 +13,7 @@ AXISCOLOR = "blue"
 BACKGROUNDCOLOR = "black"
 STARCOLOR = "white"
 NONAME_STARCOLOR = "grey"
+BONUS_BOXCOLOR = "orange"
 
 # The function takes in graph points an input and returns the equivalent coordinates on the turtle window. xo,yo are the coordinate points of the graph location 0,0. The ratio is the number of pixels between 0 and 1.
 def screenCoor(x, y):
@@ -322,33 +323,21 @@ def const_drawing(pointer,processed_const_data, processed_star_data):
             pointer.pendown()
             pointer.color(colour_cycler(counter))
             pointer.goto(screenCoor(line2[0], line2[1]))
+        if name=='CYG':
+            smallest_y=smallest_y-0.08
         edges.append((smallest_x, smallest_y, biggest_x, biggest_y))
         pointer.penup()
         pointer.goto(screenCoor(edges[0][0], edges[0][1]))
         pointer.pendown()
-        pointer.color('orange')
+        pointer.color(BONUS_BOXCOLOR)
         pointer.goto(screenCoor(edges[0][2], edges[0][1]))
         pointer.goto(screenCoor(edges[0][2], edges[0][3]))
         pointer.goto(screenCoor(edges[0][0], edges[0][3]))
         pointer.goto(screenCoor(edges[0][0], edges[0][1]))
         pointer.penup()
         pointer.goto(screenCoor((edges[0][0]+edges[0][2])/2, edges[0][3]))
-        pointer.write(name,font=("Arial", 5, "normal"))
+        pointer.write(name,font=("Arial", 8, "normal"))
         counter+=1   
-
-# def bonus_box(pointer, constellation_edges):
-#     for single in constellation_edges:
-#         pointer.penup()
-#         pointer.goto(screenCoor(single_c.data[0], single_c.data[1]))
-#         pointer.pendown()
-#         pointer.color('orange')
-#         pointer.goto(screenCoor(single_c.data[2], single_c.data[1]))
-#         pointer.goto(screenCoor(single_c.data[2], single_c.data[3]))
-#         pointer.goto(screenCoor(single_c.data[0], single_c.data[3]))
-#         pointer.goto(screenCoor(single_c.data[0], single_c.data[1]))
-#         pointer.penup()
-#         pointer.goto(screenCoor((single_c.data[0]+single_c.data[2])/2, single_c.data[3]))
-#         pointer.write(single_c.name,font=("Arial", 5, "normal"))
 
 #  Setup of turtle screen before we draw
 def setup():
