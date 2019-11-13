@@ -12,7 +12,7 @@ HEIGHT = 600
 AXISCOLOR = "blue"
 BACKGROUNDCOLOR = "black"
 STARCOLOR = "white"
-STARCOLOR2 = "grey"
+NONAME_STARCOLOR = "grey"
 
 # The function takes in graph points an input and returns the equivalent coordinates on the turtle window. xo,yo are the coordinate points of the graph location 0,0. The ratio is the number of pixels between 0 and 1.
 def screenCoor(x, y):
@@ -44,7 +44,8 @@ def command_line():
         while const_file!='':
             if path.isfile(const_file)==False:
                 print(f'The constellation file you entered {const_file} is invalid.')
-            const_files.append(const_file)
+            else:
+                const_files.append(const_file)
             const_file=input('Enter a constellation file: ')
         print(f'You entered the star file {star_file} and {len(const_files)} valid constellation file(s).')
         return star_file, const_files, 0
@@ -60,7 +61,8 @@ def command_line():
             while const_file!='':
                 if path.isfile(const_file)==False:
                     print(f'The constellation file you entered {const_file} is invalid.')
-                const_files.append(const_file)
+                else:
+                    const_files.append(const_file)
                 const_file=input('Enter a constellation file: ')
             print(f'You entered the star file {star_file} and {len(const_files)} valid constellation file(s).')
             return star_file, const_files, 1
@@ -75,7 +77,8 @@ def command_line():
             while const_file!='':
                 if path.isfile(const_file)==False:
                     print(f'The constellation file you entered {const_file} is invalid.')
-                const_files.append(const_file)
+                else:
+                    const_files.append(const_file)
                 const_file=input('Enter a constellation file: ')
             print(f'You entered the star file {star_file} and {len(const_files)} valid constellation file(s).')
             return star_file, const_files, 0
@@ -91,7 +94,8 @@ def command_line():
             while const_file!='':
                 if path.isfile(const_file)==False:
                     print(f'The constellation file you entered {const_file} is invalid.')
-                const_files.append(const_file)
+                else:
+                    const_files.append(const_file)
                 const_file=input('Enter a constellation file: ')
             print(f'You entered the star file {star_file} and {len(const_files)} valid constellation file(s).')
             return star_file, const_files, 1
@@ -106,7 +110,8 @@ def command_line():
             while const_file!='':
                 if path.isfile(const_file)==False:
                     print(f'The constellation file you entered {const_file} is invalid.')
-                const_files.append(const_file)
+                else:
+                    const_files.append(const_file)
                 const_file=input('Enter a constellation file: ')
             print(f'You entered the star file {star_file} and {len(const_files)} valid constellation file(s).')
             return star_file, const_files, 2
@@ -216,7 +221,7 @@ def star_drawing(pointer, code, stars):
     for star in stars:
         if star.name=='':
             circle_radius=(10 / (star.data[2] + 2)) / 2
-            pointer.color('grey')
+            pointer.color(NONAME_STARCOLOR)
             pointer.penup()
             pointer.goto(screenCoor(star.data[0],star.data[1]))
             pointer.pendown()
@@ -229,7 +234,7 @@ def star_drawing(pointer, code, stars):
                 print(star.name)
         else: 
             circle_radius=(10 / (star.data[2] + 2)) / 2
-            pointer.color('white')
+            pointer.color(STARCOLOR)
             pointer.penup()
             pointer.goto(screenCoor(star.data[0],star.data[1]))
             pointer.pendown()
@@ -241,7 +246,7 @@ def star_drawing(pointer, code, stars):
             elif code==2:
                 print(star.name)
 
-# Takes as input the constellation files that were added during the command line argument collection and extends that to the list of const files it gets from the  user at the start of the function. Then loops through all the const files and makes tuples line-by-line and these tuples are the star edge or constellation edges. Lastly prints to the console the title of every constellation and the stars it connects. Returns list of tuples.
+# Takes as input the constellation files that were added during the command line argument collection and extends that to the list of const files it gets from the  user at the start of the function. Then loops through all the const files and makes tuples line-by-line and these tuples are the star edge or constellation edges. These tuples are grouped into a list single constellation that consists of one constellation. This list is then appended to the list processed const data. Lastly prints to the console the title of every constellation and the stars it connects. Returns list of lists (of tuples).
 def read_const_info(const_files):
     const_files_2=[]
     const_file=input('Enter a constellation file: ')
@@ -257,14 +262,16 @@ def read_const_info(const_files):
         try:
             cf=open(const_file, 'r')
             lines=cf.readlines()
+            single_constellation=[]
             const_names=[]
             for i in range(1, len(lines)):
                 star_edge=lines[i].split(',')
                 const_info=(star_edge[0], star_edge[1][0:-1])
-                processed_const_data.append(const_info)
+                single_constellation.append(const_info)
                 const_names.append(star_edge[0])
                 const_names.append(star_edge[1][0:-1])
                 const_names=list(dict.fromkeys(const_names))
+            processed_const_data.append(single_constellation)
             print(f'{lines[0][0:-1]} constellation contains {const_names}')
             cf.close()
         except IOError:
@@ -275,18 +282,19 @@ def read_const_info(const_files):
 # Takes as input the pointer which is the turtle from the setup functions, the const data from the const info function and the star data from the star info function. The const info is a list in tuples of two which are the pairs of stars which the constellation goes from, these are the pairs referred to in the first loop. The star data comes in a list of dictionaries. With the names as keys and the star data as the values. The names are what we are searching for in the second loop. Once the correct star is found by name the data is recorded  and used as the start and end point of one line of the constellation.
 def const_drawing(pointer,processed_const_data, processed_star_data):
     counter=0
-    for pair in processed_const_data:
-        for star in processed_star_data:
-            if pair[0]==star.name:
-                line1=(star.data[0], star.data[1])
-            elif pair[1]==star.name:
-                line2=(star.data[0], star.data[1])
-        pointer.penup()
-        pointer.goto(screenCoor(line1[0], line1[1]))
-        pointer.pendown()
-        pointer.color(colour_cycler(counter))
-        pointer.goto(screenCoor(line2[0], line2[1]))
-    counter+=1   
+    for single_c in processed_const_data:
+        for pair in single_c:
+            for star in processed_star_data:
+                if pair[0]==star.name:
+                    line1=(star.data[0], star.data[1])
+                elif pair[1]==star.name:
+                    line2=(star.data[0], star.data[1])
+            pointer.penup()
+            pointer.goto(screenCoor(line1[0], line1[1]))
+            pointer.pendown()
+            pointer.color(colour_cycler(counter))
+            pointer.goto(screenCoor(line2[0], line2[1]))
+        counter+=1   
 
 #  Setup of turtle screen before we draw
 def setup():
