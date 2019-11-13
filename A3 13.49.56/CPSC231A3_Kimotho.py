@@ -262,11 +262,10 @@ def read_const_info(const_files):
                 star_edge=lines[i].split(',')
                 const_info=(star_edge[0], star_edge[1][0:-1])
                 processed_const_data.append(const_info)
-            # Haven't got the name returning to work
-            #     const_names.append(star_edge[0])
-            #     if i==len(lines):
-            #         const_names.append(star_edge[1][0:-1])
-            # print(f'{lines[0][0:-1]} constellation contains {const_names}')
+                const_names.append(star_edge[0])
+                const_names.append(star_edge[1][0:-1])
+                const_names=list(dict.fromkeys(const_names))
+            print(f'{lines[0][0:-1]} constellation contains {const_names}')
             cf.close()
         except IOError:
             print(f'There was an error in opening the constellation file {const_file}')
@@ -319,7 +318,7 @@ def main():
     # Draw Constellation
     const_drawing(pointer, processed_const_data, processed_star_data)
     #Draw bounding box (Bonus) (function)
-
+    
 # Run the program 
 main()
 # Keeps turtle window open till clicked
