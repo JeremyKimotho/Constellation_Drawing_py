@@ -248,6 +248,10 @@ def star_drawing(pointer, code, stars):
 
 # Takes as input the constellation files that were added during the command line argument collection and extends that to the list of const files it gets from the  user at the start of the function. Then loops through all the const files and makes tuples line-by-line and these tuples are the star edge or constellation edges. These tuples are grouped into a list single constellation that consists of one constellation. This list is then appended to the list processed const data. Lastly prints to the console the title of every constellation and the stars it connects. Returns list of lists (of tuples).
 def read_const_info(const_files):
+    class ConstInformation:
+        def __init__(self, name, data):
+            self.name = name
+            self.data = data
     const_files_2=[]
     const_file=input('Enter a constellation file: ')
     while const_file!='':
@@ -257,6 +261,7 @@ def read_const_info(const_files):
             const_files_2.append(const_file)
         const_file=input('Enter a constellation file: ')
     all_files=const_files+const_files_2
+    all_files=list(dict.fromkeys(all_files))
     processed_const_data=[]
     for const_file in all_files:
         try:
@@ -267,7 +272,7 @@ def read_const_info(const_files):
             for i in range(1, len(lines)):
                 star_edge=lines[i].split(',')
                 const_info=(star_edge[0], star_edge[1][0:-1])
-                single_constellation.append(const_info)
+                single_constellation.append(ConstInformation(lines[0][0:-1], const_info))
                 const_names.append(star_edge[0])
                 const_names.append(star_edge[1][0:-1])
                 const_names=list(dict.fromkeys(const_names))
@@ -283,18 +288,67 @@ def read_const_info(const_files):
 def const_drawing(pointer,processed_const_data, processed_star_data):
     counter=0
     for single_c in processed_const_data:
+        edges=[]
+        name=''
+        smallest_x=2
+        smallest_y=2
+        biggest_x=-2
+        biggest_y=-2
         for pair in single_c:
+            name=pair.name
             for star in processed_star_data:
-                if pair[0]==star.name:
+                if pair.data[0]==star.name:
                     line1=(star.data[0], star.data[1])
-                elif pair[1]==star.name:
+                    if star.data[0]>biggest_x:
+                        biggest_x=star.data[0]
+                    elif star.data[0]<smallest_x:
+                        smallest_x=star.data[0]
+                    if star.data[1]>biggest_y:
+                        biggest_y=star.data[1]
+                    elif star.data[1]<smallest_y:
+                        smallest_y=star.data[1]
+                elif pair.data[1]==star.name:
                     line2=(star.data[0], star.data[1])
+                    if star.data[0]>biggest_x:
+                        biggest_x=star.data[0]
+                    elif star.data[0]<smallest_x:
+                        smallest_x=star.data[0]
+                    if star.data[1]>biggest_y:
+                        biggest_y=star.data[1]
+                    elif star.data[1]<smallest_y:
+                        smallest_y=star.data[1]
             pointer.penup()
             pointer.goto(screenCoor(line1[0], line1[1]))
             pointer.pendown()
             pointer.color(colour_cycler(counter))
             pointer.goto(screenCoor(line2[0], line2[1]))
+        edges.append((smallest_x, smallest_y, biggest_x, biggest_y))
+        pointer.penup()
+        pointer.goto(screenCoor(edges[0][0], edges[0][1]))
+        pointer.pendown()
+        pointer.color('orange')
+        pointer.goto(screenCoor(edges[0][2], edges[0][1]))
+        pointer.goto(screenCoor(edges[0][2], edges[0][3]))
+        pointer.goto(screenCoor(edges[0][0], edges[0][3]))
+        pointer.goto(screenCoor(edges[0][0], edges[0][1]))
+        pointer.penup()
+        pointer.goto(screenCoor((edges[0][0]+edges[0][2])/2, edges[0][3]))
+        pointer.write(name,font=("Arial", 5, "normal"))
         counter+=1   
+
+# def bonus_box(pointer, constellation_edges):
+#     for single in constellation_edges:
+#         pointer.penup()
+#         pointer.goto(screenCoor(single_c.data[0], single_c.data[1]))
+#         pointer.pendown()
+#         pointer.color('orange')
+#         pointer.goto(screenCoor(single_c.data[2], single_c.data[1]))
+#         pointer.goto(screenCoor(single_c.data[2], single_c.data[3]))
+#         pointer.goto(screenCoor(single_c.data[0], single_c.data[3]))
+#         pointer.goto(screenCoor(single_c.data[0], single_c.data[1]))
+#         pointer.penup()
+#         pointer.goto(screenCoor((single_c.data[0]+single_c.data[2])/2, single_c.data[3]))
+#         pointer.write(single_c.name,font=("Arial", 5, "normal"))
 
 #  Setup of turtle screen before we draw
 def setup():
@@ -325,7 +379,6 @@ def main():
     processed_const_data=read_const_info(const_files)
     # Draw Constellation
     const_drawing(pointer, processed_const_data, processed_star_data)
-    #Draw bounding box (Bonus) (function)
     
 # Run the program 
 main()
