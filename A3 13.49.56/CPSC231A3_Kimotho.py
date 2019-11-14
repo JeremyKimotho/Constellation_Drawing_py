@@ -337,6 +337,16 @@ def const_drawing(pointer,processed_const_data, processed_star_data):
         pointer.penup()
         pointer.goto(screenCoor((edges[0][0]+edges[0][2])/2, edges[0][3]))
         pointer.write(name,font=("Arial", 8, "normal"))
+        try: 
+            ef=open(name+'_.dat', 'w')
+            ef.write(str(edges[0][0])+'\n')
+            ef.write(str(edges[0][2])+'\n')
+            ef.write(str(edges[0][1])+'\n')
+            ef.write(str(edges[0][3]))
+            ef.close()
+        except IOError:
+            print('There was an error creating a file to store the smallest and largest values of x and y.')
+            sys.exit(1)
         counter+=1   
 
 #  Setup of turtle screen before we draw
