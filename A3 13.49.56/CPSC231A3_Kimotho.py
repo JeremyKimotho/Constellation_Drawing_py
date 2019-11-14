@@ -285,7 +285,7 @@ def read_const_info(const_files):
             sys.exit(1)
     return processed_const_data
     
-# Takes as input the pointer which is the turtle from the setup functions, the const data from the const info function and the star data from the star info function. The const info is a list in tuples of two which are the pairs of stars which the constellation goes from, these are the pairs referred to in the first loop. The star data comes in a list of dictionaries. With the names as keys and the star data as the values. The names are what we are searching for in the second loop. Once the correct star is found by name the data is recorded  and used as the start and end point of one line of the constellation.
+# Takes as input the pointer which is the turtle from the setup functions, the const data from the const info function and the star data from the star info function. The const info is a list in tuples of two which are the pairs of stars which the constellation goes from, these are the pairs referred to in the first loop. The star data comes in a list of dictionaries. With the names as keys and the star data as the values. The names are what we are searching for in the second loop. Once the correct star is found by name the data is recorded  and used as the start and end point of one line of the constellation. The bonus has been added to this function, works by looping through all stars in given constellation and checks if it's smaller than the current smallest, if it is it gets replaced. 
 def const_drawing(pointer,processed_const_data, processed_star_data):
     counter=0
     for single_c in processed_const_data:
